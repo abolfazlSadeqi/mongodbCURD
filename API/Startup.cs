@@ -38,8 +38,10 @@ namespace API
             services.AddSingleton<IMongoClient>(s =>
                     new MongoClient(Configuration.GetValue<string>("MgDatabaseSettings:ConnectionString")));
 
+   
             services.AddScoped<IPersonRepository, PersonRepository>();
 
+         
 
 
             // Auto Mapper Configurations

@@ -6,11 +6,21 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DAL.Repository;
-public interface IPersonRepository  {
-    List<Person> Get();
-    Person Get(string id);
-    Person Create(Person person);
-    void Update(string id, Person person);
-    void Remove(string id);
+public interface IPersonRepository
+{
+
+    Task<Person> Create(Person Person);
+
+    Task<List<Person>> Get();
+
+    Task<Person> Get(string id);
+
+    Task Remove(string id);
+
+    Task Update(string id, Person Person);
+
+    Task<List<Person>> FindByLastNameFirstName(string FirstName, string LastName);
+
+    Task<List<PersonByLastNameEmail>> GetAllLastName_Email();
 
 }

@@ -17,42 +17,51 @@ public class ApiPersonController : ControllerBase
     }
 
     [HttpGet("GetAll")]
-    public ActionResult<List<Person>> Get() => PersonRepository.Get();
+    public async Task<IEnumerable<Person>> Get() => await PersonRepository.Get();
+
+    [HttpGet("GetAllLastName_Email")]
+    public async Task<IEnumerable<PersonByLastNameEmail>> GetAllLastName_Email() => await PersonRepository.GetAllLastName_Email();
 
 
-   
+    [HttpGet("FindByLastNameFirstName")]
+    public async Task<IEnumerable<Person>> FindByLastNameFirstName([FromQuery] PersonSearchDto PersonSearchDto)
+           => await PersonRepository.FindByLastNameFirstName(PersonSearchDto.FirstName, PersonSearchDto.LastName);
+
+
+
     [HttpGet("GetByID")]
-    public ActionResult<Person> Get(string id) => PersonRepository.Get(id);
-    
+    public async Task<ActionResult<Person>> Get(string id) => await PersonRepository.Get(id);
 
-  
+
+
+
     [HttpPost("Insert")]
-    public ActionResult<Person> Post([FromBody] Person Person)
+    public async Task<ActionResult<Person>> Post([FromBody] Person Person)
     {
-        PersonRepository.Create(Person);
-        return CreatedAtAction(nameof(Get), new { id = Person.ID }, Person);
+        await PersonRepository.Create(Person);
+        return Ok("Inserted");
     }
 
- 
+
     [HttpPut("Update")]
-    public ActionResult Put(string id, [FromBody] Person Person)
+    public async Task<ActionResult> Put(string id, [FromBody] Person Person)
     {
         var existingPerson = PersonRepository.Get(id);
 
-        if (existingPerson == null)  return NotFound("not found");
+        if (existingPerson == null) return NotFound("not found");
         PersonRepository.Update(id, Person);
 
         return NoContent();
     }
 
-    
+
     [HttpDelete("Delete")]
-    public ActionResult Delete(string id)
+    public async Task<ActionResult> Delete(string id)
     {
         var Person = PersonRepository.Get(id);
 
         if (Person == null) return NotFound("not found");
-        PersonRepository.Remove(Person.ID);
+        PersonRepository.Remove(id);
 
         return Ok("deleted");
     }
