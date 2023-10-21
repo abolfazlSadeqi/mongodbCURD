@@ -23,4 +23,6 @@ public interface IPersonRepository
 
     Task<List<PersonByLastNameEmail>> GetAllLastName_Email();
 
+    Task<Person> BulkInsert(List<Person> Persons);
+
 }

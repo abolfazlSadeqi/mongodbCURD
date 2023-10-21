@@ -16,7 +16,7 @@ public class ApiPersonController : ControllerBase
         this.PersonRepository = PersonRepository;
     }
 
-    [HttpGet("GetAll")]
+    [HttpGet("GetAllPersons")]
     public async Task<IEnumerable<Person>> Get() => await PersonRepository.Get();
 
     [HttpGet("GetAllLastName_Email")]
@@ -40,6 +40,13 @@ public class ApiPersonController : ControllerBase
     {
         await PersonRepository.Create(Person);
         return Ok("Inserted");
+    }
+
+    [HttpPost("BulkInsert")]
+    public async Task<ActionResult<Person>> BulkInsert([FromBody] List< Person> Persons)
+    {
+        await PersonRepository.BulkInsert(Persons);
+        return Ok("BulkInsert");
     }
 
 

@@ -25,10 +25,10 @@ namespace DefaultAPI.UnitTesting
         [Fact]
         public async Task CustomerQueryAll()
         {
-            // Act
+            // Arrange
             var response = await httpClient.GetAsync("ApiPerson/GetAllPersons");
 
-            // Assert
+            // act
             response.EnsureSuccessStatusCode();
             var stringResponse = await response.Content.ReadAsStringAsync();
             var terms = JsonSerializer.Deserialize<List<Person>>(stringResponse, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
@@ -46,16 +46,16 @@ namespace DefaultAPI.UnitTesting
         [Fact]
         public async Task GetById()
         {
-            // Act
-            var response = await httpClient.GetAsync("ApiPerson/GetByIdPersons?id=2");
+            // Arrange
+            var response = await httpClient.GetAsync("ApiPerson/GetByID?id=61a6058e6c43f32854e51f52");
 
-            // Assert
+            // act
             response.EnsureSuccessStatusCode();
             var stringResponse = await response.Content.ReadAsStringAsync();
             var terms = JsonSerializer.Deserialize<Person>(stringResponse, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 
             //Assert
-            Assert.Equal("2", terms.ID);
+            Assert.Equal("61a6058e6c43f32854e51f52", terms.ID);
             Assert.NotNull(terms);
           
         }

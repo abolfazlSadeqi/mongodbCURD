@@ -16,7 +16,17 @@ public class PersonRepository : IPersonRepository
     private const string _CollectionName = "Person";
     public PersonRepository(IMgDatabaseSettings settings, IMongoClient mongoClient)
     {
+
         var database = mongoClient.GetDatabase(settings.DatabaseName);
+
+
+
+
+        var collectionExists = database.ListCollectionNames().ToList().Contains(_CollectionName);
+        if (!collectionExists)
+            database.CreateCollection(_CollectionName);
+
+
         _Persons = database.GetCollection<Person>(_CollectionName);
 
 
@@ -25,18 +35,17 @@ public class PersonRepository : IPersonRepository
 
     public async Task<Person> Create(Person Person)
     {
-
-
         _Persons.InsertOne(Person);
-
-
         return Person;
-
-
-
-
-
     }
+
+    public async Task<Person> BulkInsert(List<Person> Persons)
+    {
+        _Persons.InsertMany(Persons);
+        return Persons.FirstOrDefault();
+    }
+
+
 
     public async Task<List<Person>> Get() => await _Persons.FindAsync(Person => true).Result.ToListAsync();
 
@@ -79,17 +88,9 @@ public class PersonRepository : IPersonRepository
 
 
         var builder = Builders<Person>.Filter;
-
-
         var filter = builder.Eq(f => f.FirstName, FirstName) & builder.Eq(f => f.LastName, LastName);
 
-
         var query = await _Persons.FindAsync(filter).Result.ToListAsync();
-
-
-
-
-
 
         return query;
     }
